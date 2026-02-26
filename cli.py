@@ -29,12 +29,13 @@ def generatecommand(count: int):
 @click.option(
     "--active/--inactive", default=True, help="Filter Active / Inactive emails"
 )
-@click.option("--search", default=None, help="Search emails")
-def listcommand(active, search):
+@click.option("--search", default=None, help="Search emails by label (regex)")
+@click.option("--export", default=None, help="Export emails to a CSV file (e.g. --export emails.csv)")
+def listcommand(active, search, export):
     "List emails"
     loop = asyncio.new_event_loop()
     try:
-        loop.run_until_complete(list(active, search))
+        loop.run_until_complete(list(active, search, export))
     except KeyboardInterrupt:
         pass
 
@@ -44,10 +45,3 @@ cli.add_command(generatecommand, name="generate")
 
 if __name__ == "__main__":
     cli()
-
-if __name__ == "__main__":
-    loop = asyncio.new_event_loop()
-    try:
-        loop.run_until_complete(generate(None))
-    except KeyboardInterrupt:
-        pass

@@ -46,6 +46,65 @@ python3 main.py
 python main.py
 ```
 
+## CLI Commands
+
+You can also use the CLI for more options:
+
+### Generate emails
+
+```bash
+# Generate 5 emails (default)
+python3 cli.py generate
+
+# Generate a specific number of emails
+python3 cli.py generate --count 10
+```
+
+### List emails
+
+```bash
+# List all active emails
+python3 cli.py list
+
+# List inactive emails
+python3 cli.py list --inactive
+
+# Search by label (supports regex)
+python3 cli.py list --search "example.com"
+```
+
+### Export emails to CSV
+
+You can export all your Hide My Email addresses to a CSV file:
+
+```bash
+# Export all active emails to a CSV file
+python3 cli.py list --export my_emails.csv
+
+# Export only inactive emails
+python3 cli.py list --inactive --export inactive_emails.csv
+
+# Combine with search
+python3 cli.py list --search "example.com" --export filtered_emails.csv
+```
+
+The exported CSV file will contain the following columns:
+
+| Column    | Description                              |
+|-----------|------------------------------------------|
+| Label     | The label/website associated with the email |
+| Email     | The generated `@icloud.com` address      |
+| Created   | Date and time the email was created      |
+| IsActive  | Whether the email is currently active    |
+
+**Example output:**
+
+```csv
+Label,Email,Created,IsActive
+example.com,random-words.0x@icloud.com,2023-01-15 10:30:00,True
+mysite.org,another-phrase.1a@icloud.com,2023-02-20 14:45:00,True
+```
+
 ## Getting iCloud cookie string
 
 > There is more than one way how you can get the required cookie string but this one is _imo_ the simplest...

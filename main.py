@@ -1,4 +1,5 @@
 import asyncio
+import csv
 import datetime
 import os
 from typing import Union, List, Optional
@@ -120,7 +121,7 @@ class RichHideMyEmail(HideMyEmail):
         except KeyboardInterrupt:
             return []
 
-    async def list(self, active: bool, search: str) -> None:
+    async def list(self, active: bool, search: str, export: str = None) -> None:
         gen_res = await self.list_email()
         if not gen_res:
             return
@@ -133,7 +134,7 @@ class RichHideMyEmail(HideMyEmail):
             elif type(error) == dict and "errorMessage" in error:
                 err_msg = error["errorMessage"]
             self.console.log(
-                f"[bold red][ERR][/] - Failed to generate email. Reason: {err_msg}"
+                f"[bold red][ERR][/] - Failed to list emails. Reason: {err_msg}"
             )
             return
 
@@ -142,32 +143,32 @@ class RichHideMyEmail(HideMyEmail):
         self.table.add_column("Created Date Time")
         self.table.add_column("IsActive")
 
+        rows = []
         for row in gen_res["result"]["hmeEmails"]:
             if row["isActive"] == active:
-                if search is not None and re.search(search, row["label"]):
-                    self.table.add_row(
-                        row["label"],
-                        row["hme"],
-                        str(
-                            datetime.datetime.fromtimestamp(
-                                row["createTimestamp"] / 1000
-                            )
-                        ),
-                        str(row["isActive"]),
+                if search is not None and not re.search(search, row["label"]):
+                    continue
+                created = str(
+                    datetime.datetime.fromtimestamp(
+                        row["createTimestamp"] / 1000
                     )
-                else:
-                    self.table.add_row(
-                        row["label"],
-                        row["hme"],
-                        str(
-                            datetime.datetime.fromtimestamp(
-                                row["createTimestamp"] / 1000
-                            )
-                        ),
-                        str(row["isActive"]),
-                    )
+                )
+                self.table.add_row(
+                    row["label"],
+                    row["hme"],
+                    created,
+                    str(row["isActive"]),
+                )
+                rows.append((row["label"], row["hme"], created, str(row["isActive"])))
 
         self.console.print(self.table)
+
+        if export and rows:
+            with open(export, "w", newline="") as f:
+                writer = csv.writer(f)
+                writer.writerow(["Label", "Email", "Created", "IsActive"])
+                writer.writerows(rows)
+            self.console.log(f':star: {len(rows)} email(s) exported to "{export}"')
 
 
 async def generate(count: Optional[int]) -> None:
@@ -175,9 +176,9 @@ async def generate(count: Optional[int]) -> None:
         await hme.generate(count)
 
 
-async def list(active: bool, search: str) -> None:
+async def list(active: bool, search: str, export: str = None) -> None:
     async with RichHideMyEmail() as hme:
-        await hme.list(active, search)
+        await hme.list(active, search, export)
 
 
 if __name__ == "__main__":

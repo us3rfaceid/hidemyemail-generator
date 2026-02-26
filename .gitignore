@@ -4,5 +4,6 @@ build/
 dist/
 emails.txt
 cookie.txt
+*.csv
 **/.DS_Store
 *.spec
