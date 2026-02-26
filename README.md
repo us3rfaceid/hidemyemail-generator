@@ -109,9 +109,9 @@ mysite.org,another-phrase.1a@icloud.com,2023-02-20 14:45:00,True
 
 > There is more than one way how you can get the required cookie string but this one is _imo_ the simplest...
 
-1. Download [EditThisCookie](https://chrome.google.com/webstore/detail/editthiscookie/fngmhnnpilhplaeedifhccceomclgfbg) Chrome extension
+1. Download [EditThisCookie](https://chromewebstore.google.com/detail/editthiscookie-v3/ojfebgpkimhlhcblbalbfjblapadhbol) Chrome extension
 
-2. Go to [EditThisCookie settings page](chrome-extension://fngmhnnpilhplaeedifhccceomclgfbg/options_pages/user_preferences.html) and set the preferred export format to `Semicolon separated name=value pairs`
+2. Go to [EditThisCookie settings page](chrome-extension://ojfebgpkimhlhcblbalbfjblapadhbol/options_pages/user_preferences.html) and set the preferred export format to `Semicolon separated name=value pairs`
 
 <p align="center"><img src="docs/cookie-settings.png" width=70%></p>
 
